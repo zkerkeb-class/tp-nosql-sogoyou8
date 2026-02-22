@@ -264,11 +264,10 @@ mdp: Passwordtest
 <p align="center">
   <img src="screenshots/Pokédex.png" width="360" alt="Pokédex" />
   <img src="screenshots/Favoris.png" width="360" alt="Favoris" />
-
+  <img src="screenshots/PokéInfo.png" width="360" alt="Détails d'un Pokémon" />
 </p>
 
 <p align="center">
   <img src="screenshots/Equipe.png" width="360" alt="Équipes" />
   <img src="screenshots/Statistiques.png" width="360" alt="Statistiques" />
-  <img src="screenshots/PokéInfo.png" width="360" alt="Détails d'un Pokémon" />
 </p>
