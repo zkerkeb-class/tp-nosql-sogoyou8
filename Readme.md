@@ -270,4 +270,5 @@ mdp: Passwordtest
 <p align="center">
   <img src="screenshots/Equipe.png" width="360" alt="Équipes" />
   <img src="screenshots/Statistiques.png" width="360" alt="Statistiques" />
+  <img src="screenshots/Pokéinfo.png" width="360" alt="Détails d'un Pokémon" />
 </p>
