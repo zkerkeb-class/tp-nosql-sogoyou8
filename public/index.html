@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokédex</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- NAV -->
+    <nav class="navbar">
+        <div class="nav-brand" onclick="navigateTo('pokedex')">
+            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" alt="pokeball" class="nav-logo">
+            <span>Pokédex</span>
+        </div>
+        <div class="nav-links">
+            <button class="nav-btn active" data-page="pokedex" onclick="navigateTo('pokedex')">Pokédex</button>
+            <button class="nav-btn" data-page="favorites" onclick="navigateTo('favorites')">❤️ Favoris</button>
+            <button class="nav-btn" data-page="teams" onclick="navigateTo('teams')">👥 Équipes</button>
+            <button class="nav-btn" data-page="stats" onclick="navigateTo('stats')">📊 Stats</button>
+        </div>
+        <div class="nav-auth" id="nav-auth">
+            <button class="btn btn-outline" onclick="showModal('login')">Connexion</button>
+            <button class="btn btn-primary" onclick="showModal('register')">Inscription</button>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="container">
+        <!-- PAGE: POKEDEX -->
+        <section id="page-pokedex" class="page active">
+            <div class="page-header">
+                <h1>Pokédex</h1>
+                <p class="subtitle">Explorez les Pokémon de la 1ère génération</p>
+            </div>
+
+            <!-- FILTRES -->
+            <div class="filters">
+                <div class="search-box">
+                    <input type="text" id="search-name" placeholder="Rechercher un Pokémon..." oninput="debouncedSearch()">
+                </div>
+                <div class="filter-group">
+                    <select id="filter-type" onchange="onFilterChange()">
+                        <option value="">Tous les types</option>
+                        <option value="Normal">Normal</option>
+                        <option value="Fire">Feu</option>
+                        <option value="Water">Eau</option>
+                        <option value="Electric">Électrik</option>
+                        <option value="Grass">Plante</option>
+                        <option value="Ice">Glace</option>
+                        <option value="Fighting">Combat</option>
+                        <option value="Poison">Poison</option>
+                        <option value="Ground">Sol</option>
+                        <option value="Flying">Vol</option>
+                        <option value="Psychic">Psy</option>
+                        <option value="Bug">Insecte</option>
+                        <option value="Rock">Roche</option>
+                        <option value="Ghost">Spectre</option>
+                        <option value="Dragon">Dragon</option>
+                        <option value="Dark">Ténèbres</option>
+                        <option value="Steel">Acier</option>
+                        <option value="Fairy">Fée</option>
+                    </select>
+                    <select id="filter-sort" onchange="onFilterChange()">
+                        <option value="id">N° croissant</option>
+                        <option value="-id">N° décroissant</option>
+                        <option value="name.french">Nom A-Z</option>
+                        <option value="-name.french">Nom Z-A</option>
+                        <option value="-base.Speed">Vitesse ↓</option>
+                        <option value="base.Speed">Vitesse ↑</option>
+                    </select>
+                    <button class="btn btn-outline btn-small" id="shiny-toggle" onclick="toggleShiny()">✨ Shiny</button>
+                </div>
+            </div>
+
+            <!-- GRILLE POKEMON -->
+            <div id="pokemon-grid" class="pokemon-grid"></div>
+
+            <!-- PAGINATION -->
+            <div id="pagination" class="pagination"></div>
+        </section>
+
+        <!-- PAGE: FAVORIS -->
+        <section id="page-favorites" class="page">
+            <div class="page-header">
+                <h1>❤️ Mes Favoris</h1>
+                <p class="subtitle">Vos Pokémon préférés</p>
+            </div>
+            <div id="favorites-grid" class="pokemon-grid"></div>
+            <div id="favorites-empty" class="empty-state" style="display:none;">
+                <p>Vous n'avez aucun favori. Connectez-vous et ajoutez des Pokémon !</p>
+            </div>
+        </section>
+
+        <!-- PAGE: EQUIPES -->
+        <section id="page-teams" class="page">
+            <div class="page-header">
+                <h1>👥 Mes Équipes</h1>
+                <p class="subtitle">Constituez vos équipes de combat</p>
+                <button class="btn btn-primary" onclick="showCreateTeamModal()" id="btn-create-team" style="display:none; margin-top: 1rem;">+ Nouvelle équipe</button>
+            </div>
+            <div id="teams-list" class="teams-list"></div>
+            <div id="teams-empty" class="empty-state" style="display:none;">
+                <p>Vous n'avez aucune équipe. Connectez-vous et créez-en une !</p>
+            </div>
+        </section>
+
+        <!-- PAGE: STATS -->
+        <section id="page-stats" class="page">
+            <div class="page-header">
+                <h1>📊 Statistiques</h1>
+                <p class="subtitle">Tout savoir sur les Pokémon en un coup d'œil</p>
+            </div>
+            <div id="stats-content" class="stats-content"></div>
+        </section>
+    </main>
+
+    <!-- MODAL: AUTH -->
+    <div id="modal-overlay" class="modal-overlay" onclick="closeModal()">
+        <div class="modal" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModal()">✕</button>
+            <div id="modal-content"></div>
+        </div>
+    </div>
+
+    <!-- MODAL: POKEMON DETAIL -->
+    <div id="detail-overlay" class="modal-overlay" onclick="closeDetail()">
+        <div class="modal modal-large" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeDetail()">✕</button>
+            <div id="detail-content"></div>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="/js/app.js"></script>
+</body>
+</html>
