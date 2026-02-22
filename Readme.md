@@ -257,3 +257,16 @@ Les routes `GET` sont publiques. Les routes `POST`, `PUT`, `DELETE` sur les Pok�
 ```
 Username: userTest
 mdp: Passwordtest
+```
+
+## Screenshots
+
+<p align="center">
+  <img src="screenshots/01.png" width="360" alt="Accueil" />
+  <img src="screenshots/02.png" width="360" alt="Pokédex" />
+</p>
+
+<p align="center">
+  <img src="screenshots/03.png" width="360" alt="Favoris" />
+  <img src="screenshots/04.png" width="360" alt="Équipes" />
+</p>
