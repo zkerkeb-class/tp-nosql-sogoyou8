@@ -268,6 +268,6 @@ mdp: Passwordtest
 </p>
 
 <p align="center">
-  <img src="screenshots/Equipes.png" width="360" alt="Équipes" />
+  <img src="screenshots/Equipe.png" width="360" alt="Équipes" />
   <img src="screenshots/Statistiques.png" width="360" alt="Statistiques" />
 </p>
