@@ -262,11 +262,12 @@ mdp: Passwordtest
 ## Screenshots
 
 <p align="center">
-  <img src="screenshots/01.png" width="360" alt="Accueil" />
-  <img src="screenshots/02.png" width="360" alt="Pokédex" />
+  <img src="screenshots/Pokédex.png" width="360" alt="Pokédex" />
+  <img src="screenshots/Favoris.png" width="360" alt="Favoris" />
+
 </p>
 
 <p align="center">
-  <img src="screenshots/03.png" width="360" alt="Favoris" />
-  <img src="screenshots/04.png" width="360" alt="Équipes" />
+  <img src="screenshots/Équipes.png" width="360" alt="Équipes" />
+  <img src="screenshots/Statistiques.png" width="360" alt="Statistiques" />
 </p>
