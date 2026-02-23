@@ -1,10 +1,15 @@
 # 🔴 Pokédex API — TP NoSQL
 
-> API REST complète des 151 Pokémon de la 1ère génération, avec interface web intégrée.
+> API REST complète des 151 Pokémon de la 1ère génération, avec interface web intégrée et système d'authentification JWT.
 
 ![Node.js](https://img.shields.io/badge/Node.js-v18+-339933?logo=node.js&logoColor=white)
 ![MongoDB](https://img.shields.io/badge/MongoDB-v6+-47A248?logo=mongodb&logoColor=white)
 ![Express](https://img.shields.io/badge/Express-v5-000000?logo=express&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-Auth-FF6B9D)
+
+**Status** : ✅ **Complet** — Toutes les 6 parties + frontend implémentés et fonctionnels.
+
+---
 
 ## 📋 Table des matières
 
@@ -12,93 +17,133 @@
 - [Prérequis](#-prérequis)
 - [Installation](#-installation)
 - [Lancement](#-lancement)
-- [Structure du projet](#-structure-du-projet)
+- [Structure](#-structure-du-projet)
 - [API Endpoints](#-api-endpoints)
 - [Authentification](#-authentification)
-- [Frontend](#-frontend)
+- [Screenshots](#-screenshots)
 - [Technologies](#-technologies)
 
 ---
 
 ## ✨ Fonctionnalités
 
-### Backend (API REST)
-- **CRUD complet** sur les Pokémon (Create, Read, Update, Delete)
-- **Filtres avancés** : par type, par nom (recherche partielle insensible à la casse)
-- **Tri** : par n°, nom, stats (croissant/décroissant)
-- **Pagination** : `page` + `limit` avec métadonnées (`total`, `totalPages`)
-- **Authentification JWT** : inscription, connexion, protection des routes sensibles
-- **Favoris** : ajouter/retirer/lister des Pokémon favoris (par utilisateur)
-- **Équipes** : créer/modifier/supprimer des équipes de 6 Pokémon max (avec `populate`)
-- **Statistiques** : agrégation MongoDB (nombre par type, moyennes HP, records, moyennes globales)
-- **Validation** : types autorisés, stats entre 1-255, messages d'erreur en français
+### 🔧 Backend — 6 parties TP
 
-### Frontend (SPA)
-- **Pokédex** : grille de Pokémon avec recherche, filtres, tri, pagination
-- **Mode Shiny** : toggle pour afficher les sprites shiny
-- **Fiche détaillée** : stats avec barres visuelles, ajout aux équipes depuis la fiche
-- **Favoris** : gestion visuelle avec cœurs sur les cartes
-- **Équipes** : interface drag & drop style, 6 slots par équipe
-- **Statistiques** : page avec compteur animé, records, graphiques par type, moyennes globales
-- **Design** : thème sombre Pokémon, responsive, animations fluides
+**Partie 1-3 : CRUD & Routes Express**
+- ✅ CRUD complet (Create, Read, Update, Delete)
+- ✅ Routes organisées avec Express Router
+- ✅ Gestion des erreurs (try/catch)
+- ✅ Statuts HTTP corrects (201, 204, 404, 401, 500)
+
+**Partie 4 : Filtres, Tri & Pagination**
+- ✅ Filtrer par `?type=Fire`
+- ✅ Rechercher par `?name=pika` (regex, case-insensitive)
+- ✅ Trier par `?sort=-base.Attack`
+- ✅ Paginer avec `?page=2&limit=20`
+- ✅ Métadonnées pagination (total, totalPages)
+- ✅ Tous les paramètres se combinent
+
+**Partie 5 : Authentification JWT**
+- ✅ `POST /api/auth/register` — Inscription (pre-save bcrypt)
+- ✅ `POST /api/auth/login` — Connexion (JWT 24h)
+- ✅ Middleware JWT (vérification token)
+- ✅ Routes protégées (POST/PUT/DELETE)
+- ✅ Routes publiques (GET)
+
+**Partie 6 : Fonctionnalités bonus**
+- ✅ **6.A** — Favoris ($addToSet, $pull)
+- ✅ **6.B** — Statistiques (agrégation MongoDB)
+- ✅ **6.C** — Validation (types enum, stats 1-255, messages FR)
+- ✅ **6.D** — Équipes (CRUD, max 6 Pokémon, populate)
+
+### 🖥️ Frontend — SPA Vanilla JS
+
+- ✅ **Pokédex** : grille responsive, filtres/tri/pagination temps réel
+- ✅ **Mode Shiny** : toggle sprites alternatifs
+- ✅ **Fiche détaillée** : stats avec barres visuelles
+- ✅ **Favoris** : cœurs visuels, persistance utilisateur
+- ✅ **Équipes** : gestion 6 slots par équipe
+- ✅ **Statistiques** : compteur animé, records, graphiques
+- ✅ **Authentification** : login/register modals, toggle mot de passe 👁️
+- ✅ **Auto-logout** : détection 401, suppression token expiré
+- ✅ **Design** : thème sombre Pokémon, responsive, animations fluides
 
 ---
 
 ## 📦 Prérequis
 
-- **Node.js** v18 ou supérieur
-- **MongoDB** en local (`mongod`) ou [MongoDB Atlas](https://www.mongodb.com/atlas) (gratuit)
-- **npm** (inclus avec Node.js)
+- **Node.js** v18+
+- **MongoDB** local ou [Atlas](https://www.mongodb.com/atlas) (gratuit)
+- **npm**
 
 ---
 
 ## 🚀 Installation
 
+### 1. Cloner
+
 ```bash
-# 1. Cloner le repository
-git clone <url-du-repo>
+git clone https://github.com/sogoyou8/API-pokemon-NoSQL.git
 cd tp-nosql-sogoyou8
+```
 
-# 2. Installer les dépendances
+### 2. Installer dépendances
+
+```bash
 npm install
+```
 
-# 3. Configurer l'environnement
+### 3. Configurer `.env`
+
+```bash
 cp .env.example .env
 ```
 
-Éditez le fichier `.env` si nécessaire :
-
+Vérifiez que `.env` contient :
 ```env
 PORT=3000
 MONGODB_URI=mongodb://localhost:27017/pokemons
 API_URL=http://localhost:3000
-JWT_SECRET=supersecretkey_pokemon_2026
+JWT_SECRET=7bf651e6a0c2ec2cf4a4815602758ff4ad1dfb58715a284a01ad8b742838dc97dbe3ca06310e01d181a64d2e013f1c4c
 ```
 
 ---
 
 ## ▶️ Lancement
 
-```bash
-# Importer les 151 Pokémon dans MongoDB (à faire une fois)
-npm run seed
+### Importer les 151 Pokémon (une seule fois)
 
-# Lancer le serveur en mode développement
+```bash
+npm run seed
+```
+
+**Résultat** :
+```
+Connecté à MongoDB !
+Collection vidée.
+151 Pokémon insérés avec succès !
+Connexion fermée.
+```
+
+### Lancer le serveur
+
+```bash
 npm run dev
 ```
 
-Le serveur démarre sur `http://localhost:3000`.
+Accès : **http://localhost:3000**
 
-### Vérification rapide
+### Vérifications
 
 ```bash
-# Vérifier que l'API répond
+# Tester l'API
 curl http://localhost:3000/api/pokemons?limit=3
 
-# Vérifier dans mongosh
+# Mongosh
 mongosh
 > use pokemons
-> db.pokemons.countDocuments()   // → 151
+> db.pokemons.countDocuments()      # → 151
+> db.pokemons.findOne({ id: 25 })  # → Pikachu
 ```
 
 ---
@@ -107,41 +152,38 @@ mongosh
 
 ```
 tp-nosql-sogoyou8/
-├── index.js                 ← Point d'entrée Express
+├── index.js                    ← Serveur Express
 ├── package.json
-├── .env                     ← Variables d'environnement
-├── .env.example
+├── .env & .env.example
 │
 ├── db/
-│   ├── connect.js           ← Connexion MongoDB via Mongoose
-│   └── seed.js              ← Script d'import des 151 Pokémon
+│   ├── connect.js              ← Connexion Mongoose
+│   └── seed.js                 ← Import 151 Pokémon
 │
 ├── models/
-│   ├── pokemon.js           ← Schéma Pokémon (validation avancée)
-│   ├── user.js              ← Schéma User (avec favoris)
-│   └── team.js              ← Schéma Équipe (ref → Pokemon, max 6)
+│   ├── pokemon.js              ← Schéma avec validation
+│   ├── user.js                 ← Pre-save bcrypt, favoris
+│   └── team.js                 ← Équipes (max 6)
 │
 ├── middleware/
-│   └── auth.js              ← Middleware JWT (vérification du token)
+│   └── auth.js                 ← Vérification JWT
 │
 ├── routes/
-│   ├── pokemons.js          ← CRUD Pokémon + filtres/tri/pagination
-│   ├── auth.js              ← Register + Login (JWT)
-│   ├── favorites.js         ← Gestion des favoris
-│   ├── teams.js             ← CRUD Équipes (avec populate)
-│   └── stats.js             ← Statistiques par agrégation
+│   ├── pokemons.js             ← CRUD + filtres/tri/pagination
+│   ├── auth.js                 ← Register + Login
+│   ├── favorites.js            ← GET/POST/DELETE
+│   ├── teams.js                ← CRUD avec populate
+│   └── stats.js                ← Agrégation MongoDB
 │
 ├── data/
-│   ├── pokemonsList.js      ← Données brutes des 151 Pokémon
-│   ├── pokemons.json        ← Données JSON générées
-│   └── generatePokemonsJson.js
+│   ├── pokemonsList.js         ← 151 Pokémon source
+│   └── pokemons.json           ← JSON généré
 │
-├── assets/
-│   └── pokemons/
-│       ├── 1.png … 151.png  ← Sprites normaux
-│       └── shiny/           ← Sprites shiny
+├── assets/pokemons/
+│   ├── 1.png … 151.png         ← Sprites normaux
+│   └── shiny/1.png … 151.png   ← Sprites shiny
 │
-└── public/                  ← Frontend (SPA)
+└── public/
     ├── index.html
     ├── css/style.css
     └── js/app.js
@@ -153,113 +195,121 @@ tp-nosql-sogoyou8/
 
 ### Pokémon
 
-| Méthode | Route | Auth | Description |
-|---------|-------|------|-------------|
-| `GET` | `/api/pokemons` | ❌ | Lister les Pokémon (filtres, tri, pagination) |
-| `GET` | `/api/pokemons/:id` | ❌ | Détail d'un Pokémon |
-| `POST` | `/api/pokemons` | ✅ | Créer un Pokémon |
-| `PUT` | `/api/pokemons/:id` | ✅ | Modifier un Pokémon |
-| `DELETE` | `/api/pokemons/:id` | ✅ | Supprimer un Pokémon |
+| Méthode | Route | Auth | Status | Description |
+|---------|-------|------|--------|-------------|
+| `GET` | `/api/pokemons` | ✅ Non | 200 | Lister (avec filtres/tri/pagination) |
+| `GET` | `/api/pokemons/:id` | ✅ Non | 200/404 | Détail |
+| `POST` | `/api/pokemons` | 🔒 Oui | 201 | Créer |
+| `PUT` | `/api/pokemons/:id` | 🔒 Oui | 200/404 | Modifier |
+| `DELETE` | `/api/pokemons/:id` | 🔒 Oui | 204/404 | Supprimer |
 
-#### Query parameters (GET /api/pokemons)
+**Query Parameters** :
+```
+?type=Fire&name=pika&sort=-base.Attack&page=2&limit=20
+```
 
 | Paramètre | Exemple | Description |
 |-----------|---------|-------------|
-| `type` | `?type=Fire` | Filtrer par type |
-| `name` | `?name=pika` | Recherche par nom (insensible à la casse) |
-| `sort` | `?sort=-base.Attack` | Trier (préfixe `-` = décroissant) |
-| `page` | `?page=2` | Numéro de page (défaut: 1) |
-| `limit` | `?limit=20` | Résultats par page (défaut: 50) |
+| `type` | `Fire` | Filtre par type |
+| `name` | `pika` | Recherche par nom |
+| `sort` | `-base.HP` | Tri (- = desc) |
+| `page` | `2` | Numéro de page |
+| `limit` | `20` | Résultats par page |
 
-#### Format de réponse paginée
-
-```json
-{
-  "data": [{ "id": 1, "name": { "french": "Bulbizarre" }, ... }],
-  "page": 1,
-  "limit": 24,
-  "total": 151,
-  "totalPages": 7
-}
-```
+---
 
 ### Authentification
 
 | Méthode | Route | Description |
 |---------|-------|-------------|
-| `POST` | `/api/auth/register` | Inscription (username + password) |
-| `POST` | `/api/auth/login` | Connexion → retourne un JWT |
+| `POST` | `/api/auth/register` | Inscription |
+| `POST` | `/api/auth/login` | Connexion → JWT |
 
-#### Exemples
-
+**Register** :
 ```bash
-# Inscription
 curl -X POST http://localhost:3000/api/auth/register \
   -H "Content-Type: application/json" \
   -d '{"username": "sacha", "password": "pikachu123"}'
+# → 201 { "message": "Utilisateur sacha créé avec succès." }
+```
 
-# Connexion
+**Login** :
+```bash
 curl -X POST http://localhost:3000/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{"username": "sacha", "password": "pikachu123"}'
-# → { "token": "eyJhbGciOi..." }
+# → 200 { "token": "eyJ..." }
 ```
 
-### Favoris (authentifié)
+**Utiliser token** :
+```bash
+curl -X POST http://localhost:3000/api/pokemons \
+  -H "Authorization: Bearer <token>" \
+  -d '{"id": 152, ...}'
+```
+
+---
+
+### Favoris (Authentifié)
 
 | Méthode | Route | Description |
 |---------|-------|-------------|
 | `GET` | `/api/favorites` | Lister mes favoris |
-| `POST` | `/api/favorites/:pokemonId` | Ajouter un favori |
-| `DELETE` | `/api/favorites/:pokemonId` | Retirer un favori |
+| `POST` | `/api/favorites/:pokemonId` | Ajouter |
+| `DELETE` | `/api/favorites/:pokemonId` | Retirer |
 
-### Équipes (authentifié)
+---
 
-| Méthode | Route | Description |
-|---------|-------|-------------|
-| `GET` | `/api/teams` | Lister mes équipes |
-| `GET` | `/api/teams/:id` | Détail d'une équipe (avec populate) |
-| `POST` | `/api/teams` | Créer une équipe |
-| `PUT` | `/api/teams/:id` | Modifier une équipe |
-| `DELETE` | `/api/teams/:id` | Supprimer une équipe |
+### Équipes (Authentifié)
+
+| Méthode | Route | Max | Description |
+|---------|-------|-----|-------------|
+| `GET` | `/api/teams` | — | Lister (populate) |
+| `POST` | `/api/teams` | 6 | Créer |
+| `PUT` | `/api/teams/:id` | 6 | Modifier |
+| `DELETE` | `/api/teams/:id` | — | Supprimer |
+
+---
 
 ### Statistiques
 
 | Méthode | Route | Auth | Description |
 |---------|-------|------|-------------|
-| `GET` | `/api/stats` | ❌ | Statistiques avec agrégation MongoDB |
-
-#### Données retournées
-
-- `totalPokemons` — Nombre total de Pokémon
-- `countByType` — Nombre de Pokémon par type (agrégation `$group`)
-- `avgHPByType` — HP moyen par type (agrégation `$avg`)
-- `globalAvg` — Moyennes globales (HP, Attack, Defense, Speed)
-- `highestAttack` — Pokémon avec la plus haute attaque
-- `highestHP` — Pokémon avec le plus de HP
-- `fastestPokemon` — Pokémon le plus rapide
-- `highestDefense` — Pokémon avec la meilleure défense
+| `GET` | `/api/stats` | ✅ Non | Agrégation complète |
 
 ---
 
 ## 🔐 Authentification
 
-L'API utilise **JWT (JSON Web Token)** pour l'authentification.
+### Fonctionnement
 
-1. **Inscription** via `POST /api/auth/register` (le mot de passe est hashé avec bcrypt)
-2. **Connexion** via `POST /api/auth/login` → retourne un token JWT (valide 24h)
-3. **Utilisation** : ajouter le header `Authorization: Bearer <token>` aux requêtes protégées
+1. **Register** : hash mdp (pre-save bcrypt) → création user
+2. **Login** : vérification bcrypt → JWT signé (24h)
+3. **Usage** : header `Authorization: Bearer <token>`
+4. **Verify** : middleware auth.js → 401 si invalide/expiré
 
-Les routes `GET` sont publiques. Les routes `POST`, `PUT`, `DELETE` sur les Pokémon sont protégées. Les favoris et équipes nécessitent une authentification.
+### Routes protégées
 
-### Compte de test
+| Route | Auth requise |
+|-------|--------------|
+| `GET /api/pokemons` | ✅ Non |
+| `GET /api/pokemons/:id` | ✅ Non |
+| `POST /api/pokemons` | 🔒 Oui |
+| `PUT /api/pokemons/:id` | 🔒 Oui |
+| `DELETE /api/pokemons/:id` | 🔒 Oui |
+| `GET/POST/DELETE /api/favorites/*` | 🔒 Oui |
+| `GET/POST/PUT/DELETE /api/teams/*` | 🔒 Oui |
+| `GET /api/stats` | ✅ Non |
 
+**Compte test** :
 ```
 Username: userTest
-mdp: Passwordtest
+Password: Passwordtest
 ```
 
-## Screenshots
+---
+
+## 🖼️ Screenshots
 
 <p align="center">
   <img src="screenshots/Pokédex.png" width="360" alt="Pokédex" />
@@ -271,3 +321,54 @@ mdp: Passwordtest
   <img src="screenshots/Equipe.png" width="360" alt="Équipes" />
   <img src="screenshots/Statistiques.png" width="360" alt="Statistiques" />
 </p>
+
+---
+
+## 🛠️ Technologies
+
+### Backend
+- **Express.js** — Serveur REST
+- **MongoDB + Mongoose** — BD & ODM
+- **bcrypt** — Hash sécurisé
+- **JWT** — Auth token
+- **CORS** — Origines croisées
+- **dotenv** — Env vars
+
+### Frontend
+- **Vanilla JS** — SPA sans framework
+- **CSS3** — Thème sombre, animations, responsive
+- **Fetch API** — Requêtes async
+- **LocalStorage** — Persistance token
+
+### Outils
+- **nodemon** — Hot-reload
+- **mongosh** — CLI MongoDB
+- **Git** — Versioning
+
+---
+
+## 📝 Scripts
+
+| Commande | Description |
+|----------|-------------|
+| `npm run dev` | Serveur avec nodemon |
+| `npm run seed` | Import 151 Pokémon |
+
+---
+
+## ✅ Checklist complète
+
+- [x] Partie 1 : Routes Express GET/POST/PUT/DELETE
+- [x] Partie 2 : MongoDB + Mongoose + Seed
+- [x] Partie 3 : CRUD complet + erreurs
+- [x] Partie 4 : Filtres + tri + pagination
+- [x] Partie 5 : Auth JWT (register/login)
+- [x] Partie 6.A : Favoris
+- [x] Partie 6.B : Stats (agrégation)
+- [x] Partie 6.C : Validation (enum, range, FR)
+- [x] Partie 6.D : Équipes (CRUD + populate)
+- [x] Frontend : UI complète + SPA
+
+---
+
+**Bon jeu ! 🎮**
